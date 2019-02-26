@@ -30,15 +30,18 @@ OBJECTS =	main.o						\
 		osfive/lib/libc/string/bcopy.o			\
 		start.o
 
-CFLAGS =	-march=mips32r2 -EL -msoft-float				\
-		-nostdlib -mno-abicalls -O -fno-pic -fno-builtin-printf		\
-		-O -pipe -g -nostdinc -fno-omit-frame-pointer			\
-		-fno-optimize-sibling-calls -ffreestanding -fwrapv		\
-		-fdiagnostics-show-option -fms-extensions -finline-limit=8000	\
-		-Wall -Wredundant-decls -Wnested-externs -Wstrict-prototypes	\
-		-Wmissing-prototypes -Wpointer-arith -Winline -Wcast-qual	\
-		-Wundef -Wno-pointer-sign -Wno-format -Wmissing-include-dirs	\
-		-Wno-unknown-pragmas -Werror
+CFLAGS =	-march=mips32r2 -EL -msoft-float -nostdlib	\
+		-mno-abicalls -O -fno-pic -fno-builtin-printf	\
+		-O -pipe -g -nostdinc -fno-omit-frame-pointer	\
+		-fno-optimize-sibling-calls -ffreestanding	\
+		-fwrapv	-fdiagnostics-show-option		\
+		-fms-extensions -finline-limit=8000 -Wall	\
+		-Wredundant-decls -Wnested-externs		\
+		-Wstrict-prototypes -Wmissing-prototypes	\
+		-Wpointer-arith -Winline -Wcast-qual -Wundef	\
+		-Wno-pointer-sign -Wno-format			\
+		-Wmissing-include-dirs -Wno-unknown-pragmas	\
+		-Werror
 
 all: ${FONT} compile link srec
 
