@@ -31,6 +31,7 @@
 #include <machine/cpuregs.h>
 #include <machine/cpufunc.h>
 #include <machine/frame.h>
+#include <machine/machdep.h>
 
 #include <mips/mips/timer.h>
 #include <mips/mips/trap.h>
@@ -102,6 +103,14 @@ softintr(void *arg, struct trapframe *frame, int i)
 
 };
 
+static void
+mips_timer_intr_wrap(void *arg, struct trapframe *frame,
+    int mips_irq, int intc_irq)
+{
+
+	mips_timer_intr(arg, frame, mips_irq);
+}
+
 static const struct mips_intr_entry mips_intr_map[MIPS_N_INTR] = {
 	[0] = { softintr, NULL },
 	[1] = { softintr, NULL },
@@ -109,7 +118,7 @@ static const struct mips_intr_entry mips_intr_map[MIPS_N_INTR] = {
 };
 
 static const struct intc_intr_entry intc_intr_map[216] = {
-	[_CORE_TIMER_VECTOR] = { mips_timer_intr, (void *)&mtimer_sc },
+	[_CORE_TIMER_VECTOR] = { mips_timer_intr_wrap, (void *)&mtimer_sc },
 };
 
 void
@@ -117,13 +126,6 @@ udelay(uint32_t usec)
 {
 
 	mips_timer_udelay(&mtimer_sc, usec);
-}
-
-void
-usleep(uint32_t usec)
-{
-
-	mips_timer_usleep(&mtimer_sc, usec);
 }
 
 static void
@@ -354,6 +356,8 @@ app_init(void)
 	ebss = (uint32_t *)&_ebss;
 	while (sbss < ebss)
 		*sbss++ = 0;
+
+	md_init();
 
 	/* Install interrupt code */
 	bcopy(MipsException, (void *)MIPS_GEN_EXC_VEC,

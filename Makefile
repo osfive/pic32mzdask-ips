@@ -12,23 +12,26 @@ FONT =		${.OBJDIR}/ter-124n.ld
 FONT_SRC =	${.CURDIR}/fonts/ter-124n.pcf.gz
 
 OBJECTS =	main.o						\
+		osfive/lib/libfont/libfont.o			\
+		osfive/sys/kern/kern_panic.o			\
+		osfive/sys/kern/kern_timeout.o			\
+		osfive/sys/kern/subr_console.o			\
+		osfive/sys/kern/subr_prf.o			\
+		osfive/sys/kern/subr_usleep.o			\
 		osfive/sys/mips/mips/exception.o		\
-		osfive/sys/mips/mips/trap.o			\
+		osfive/sys/mips/mips/machdep.o			\
 		osfive/sys/mips/mips/timer.o			\
-		osfive/sys/mips/microchip/pic32_uart.o		\
+		osfive/sys/mips/mips/trap.o			\
+		osfive/sys/mips/microchip/pic32_intc.o		\
 		osfive/sys/mips/microchip/pic32_port.o		\
 		osfive/sys/mips/microchip/pic32_pps.o		\
 		osfive/sys/mips/microchip/pic32_spi.o		\
 		osfive/sys/mips/microchip/pic32_syscfg.o	\
-		osfive/sys/mips/microchip/pic32_intc.o		\
 		osfive/sys/mips/microchip/pic32_timer.o		\
-		osfive/sys/kern/subr_prf.o			\
-		osfive/sys/kern/subr_console.o			\
-		osfive/lib/libfont/libfont.o			\
-		osfive/lib/libc/stdio/printf.o			\
-		osfive/lib/libc/string/strlen.o			\
-		osfive/lib/libc/string/bcopy.o			\
+		osfive/sys/mips/microchip/pic32_uart.o		\
 		start.o
+
+LIBRARIES =	LIBC LIBC_QUAD
 
 CFLAGS =	-march=mips32r2 -EL -msoft-float -nostdlib	\
 		-mno-abicalls -O -fno-pic -fno-builtin-printf	\
@@ -43,19 +46,17 @@ CFLAGS =	-march=mips32r2 -EL -msoft-float -nostdlib	\
 		-Wmissing-include-dirs -Wno-unknown-pragmas	\
 		-Werror
 
-all: ${FONT} compile link srec
+all: ${FONT} __compile __link __srec
 
 ${LDSCRIPT}: ${LDSCRIPT_TPL}
 	sed s#FONT_PATH#${FONT}#g ${LDSCRIPT_TPL} > ${LDSCRIPT}
 
 ${FONT}: ${FONT_SRC}
-	gunzip -c ${FONT_SRC} | hexdump -v -e '"BYTE(0x" 1/1 "%02X" ")\n"' > ${FONT}
+	gunzip -c ${FONT_SRC} | \
+	    hexdump -v -e '"BYTE(0x" 1/1 "%02X" ")\n"' > ${FONT}
 
 clean:
 	rm -f ${OBJECTS:M*} ${FONT} ${LDSCRIPT} ${APP}.elf ${APP}.srec
 
-.include "osfive/mk/user.mk"
-.include "osfive/mk/compile.mk"
-.include "osfive/mk/link.mk"
-.include "osfive/mk/readelf.mk"
-.include "osfive/mk/objdump.mk"
+.include "osfive/lib/libc/Makefile.inc"
+.include "osfive/mk/bsd.mk"

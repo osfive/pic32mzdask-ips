@@ -50,6 +50,7 @@ SECTIONS
 	.bss : {
 		_sbss = ABSOLUTE(.);
 		*(.bss COMMON)
+		*(.sbss)
 		_ebss = ABSOLUTE(.);
 	} > sram
 
