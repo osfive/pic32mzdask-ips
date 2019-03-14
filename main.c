@@ -279,7 +279,8 @@ ips_init(void)
 	udelay(150000);
 	ips_cmd(&spi_dev, ST7789V_SLPOUT, 0);
 	udelay(500000);
-	ips_cmd(&spi_dev, ST7789V_COLMOD, 1, (COLMOD_CTRL_FMT_16BIT | COLMOD_RGB_FMT_65K));
+	ips_cmd(&spi_dev, ST7789V_COLMOD, 1,
+	    (COLMOD_CTRL_FMT_16BIT | COLMOD_RGB_FMT_65K));
 	udelay(10000);
 
 	ips_cmd(&spi_dev, ST7789V_MADCTL, 1, 0x00);
