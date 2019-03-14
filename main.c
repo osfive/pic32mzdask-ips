@@ -27,6 +27,7 @@
 #include <sys/cdefs.h>
 #include <sys/console.h>
 #include <sys/systm.h>
+#include <sys/malloc.h>
 
 #include <machine/cpuregs.h>
 #include <machine/cpufunc.h>
@@ -359,6 +360,8 @@ app_init(void)
 		*sbss++ = 0;
 
 	md_init();
+	malloc_init();
+	malloc_add_region(0xa0040380, (256*1024 - 0x380));
 
 	/* Install interrupt code */
 	bcopy(MipsException, (void *)MIPS_GEN_EXC_VEC,

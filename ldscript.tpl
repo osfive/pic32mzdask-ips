@@ -8,8 +8,9 @@ MEMORY
 	devsign       (r) : ORIGIN = 0x9fc0ffe0,  LENGTH = 16
 	prog         (rx) : ORIGIN = 0x9d000000,  LENGTH = 2048K
 	sram0      (rw!x) : ORIGIN = 0xa0000000,  LENGTH = 0x180
-	exception   (rwx) : ORIGIN = 0xa0000180,  LENGTH = 360 /* MipsExceptionEnd - MipsException */
-	sram       (rw!x) : ORIGIN = 0xa0000380,  LENGTH = 512K - 0x180 - 360
+	exception   (rwx) : ORIGIN = 0xa0000180,  LENGTH = 0x200 /* MipsExceptionEnd - MipsException */
+	sram1      (rw!x) : ORIGIN = 0xa0000380,  LENGTH = 256K
+	sram2      (rw!x) : ORIGIN = 0xa0040380,  LENGTH = 256K - 0x380 /* malloc */
 }
 
 SECTIONS
@@ -40,19 +41,19 @@ SECTIONS
 
 	.data : {
 		*(.data)
-	} > sram AT > flash
+	} > sram1 AT > flash
 
 	.sdata : {
 		_gp = .;
 		*(.sdata)
-	} > sram AT > flash
+	} > sram1 AT > flash
 
 	.bss : {
 		_sbss = ABSOLUTE(.);
 		*(.bss COMMON)
 		*(.sbss)
 		_ebss = ABSOLUTE(.);
-	} > sram
+	} > sram1
 
 	. = ALIGN(4);
 	stack_top = . + 0x1000; /* 4kB of stack memory */

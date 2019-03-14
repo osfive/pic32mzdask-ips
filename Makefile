@@ -13,6 +13,8 @@ FONT_SRC =	${.CURDIR}/fonts/ter-124n.pcf.gz
 
 OBJECTS =	main.o						\
 		osfive/lib/libfont/libfont.o			\
+		osfive/sys/kern/kern_malloc.o			\
+		osfive/sys/kern/kern_malloc_fl.o		\
 		osfive/sys/kern/kern_panic.o			\
 		osfive/sys/kern/kern_timeout.o			\
 		osfive/sys/kern/subr_console.o			\
