@@ -297,7 +297,7 @@ ips_init(void)
 }
 
 static void
-ips_main(void)
+ips_main(void *arg)
 {
 	uint8_t text[32];
 	int z;
@@ -406,5 +406,10 @@ app_init(void)
 	printf("status register: %x\n", mips_rd_status());
 	printf("compare register: %x\n", mips_rd_compare());
 
-	ips_main();
+	thread_create("ips", 50000000, ips_main, NULL);
+
+	__asm __volatile("syscall");
+
+	while (1)
+		cpu_idle();
 }
