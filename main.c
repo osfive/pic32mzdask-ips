@@ -27,12 +27,12 @@
 #include <sys/cdefs.h>
 #include <sys/console.h>
 #include <sys/systm.h>
+#include <sys/thread.h>
 #include <sys/malloc.h>
 
 #include <machine/cpuregs.h>
 #include <machine/cpufunc.h>
 #include <machine/frame.h>
-#include <machine/machdep.h>
 
 #include <mips/mips/timer.h>
 #include <mips/mips/trap.h>
@@ -326,7 +326,7 @@ ips_main(void)
 			ips_data(&spi_dev, g_data.buffer[i]);
 		z += 1;
 
-		usleep(1000000);
+		raw_sleep(CPU_FREQ / 2);
 	}
 }
 

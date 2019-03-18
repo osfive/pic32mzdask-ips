@@ -12,18 +12,6 @@ FONT =		${.OBJDIR}/ter-124n.ld
 FONT_SRC =	${.CURDIR}/fonts/ter-124n.pcf.gz
 
 OBJECTS =	main.o						\
-		osfive/lib/libfont/libfont.o			\
-		osfive/sys/kern/kern_malloc.o			\
-		osfive/sys/kern/kern_malloc_fl.o		\
-		osfive/sys/kern/kern_panic.o			\
-		osfive/sys/kern/kern_timeout.o			\
-		osfive/sys/kern/subr_console.o			\
-		osfive/sys/kern/subr_prf.o			\
-		osfive/sys/kern/subr_usleep.o			\
-		osfive/sys/mips/mips/exception.o		\
-		osfive/sys/mips/mips/machdep.o			\
-		osfive/sys/mips/mips/timer.o			\
-		osfive/sys/mips/mips/trap.o			\
 		osfive/sys/mips/microchip/pic32_intc.o		\
 		osfive/sys/mips/microchip/pic32_port.o		\
 		osfive/sys/mips/microchip/pic32_pps.o		\
@@ -33,7 +21,7 @@ OBJECTS =	main.o						\
 		osfive/sys/mips/microchip/pic32_uart.o		\
 		start.o
 
-LIBRARIES =	LIBC LIBC_QUAD
+LIBRARIES =	KERN MIPS LIBC LIBC_QUAD LIBFONT
 
 CFLAGS =	-march=mips32r2 -EL -msoft-float -nostdlib	\
 		-mno-abicalls -O -fno-pic -fno-builtin-printf	\
@@ -60,5 +48,7 @@ ${FONT}: ${FONT_SRC}
 clean:
 	rm -f ${OBJECTS:M*} ${FONT} ${LDSCRIPT} ${APP}.elf ${APP}.srec
 
+.include "osfive/lib/kern/Makefile.inc"
 .include "osfive/lib/libc/Makefile.inc"
+.include "osfive/lib/libfont/Makefile.inc"
 .include "osfive/mk/bsd.mk"
