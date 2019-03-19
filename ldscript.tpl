@@ -39,13 +39,11 @@ SECTIONS
 		*(.devsign)
 	} > devsign
 
+	_smem = ABSOLUTE(.);
 	.data : {
-		*(.data)
-	} > sram1 AT > flash
-
-	.sdata : {
-		_gp = .;
-		*(.sdata)
+		_sdata = ABSOLUTE(.);
+		*(.data*)
+		_edata = ABSOLUTE(.);
 	} > sram1 AT > flash
 
 	.bss : {

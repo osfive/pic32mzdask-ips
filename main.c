@@ -88,8 +88,6 @@ static struct mips_timer_softc mtimer_sc;
 spi_device_t spi_dev;
 
 extern uint32_t _sfont;
-extern uint32_t _sbss;
-extern uint32_t _ebss;
 
 static void
 softintr(void *arg, struct trapframe *frame, int i)
@@ -349,15 +347,7 @@ void
 app_init(void)
 {
 	uint32_t status;
-	uint32_t *sbss;
-	uint32_t *ebss;
 	uint32_t reg;
-
-	/* Clear BSS */
-	sbss = (uint32_t *)&_sbss;
-	ebss = (uint32_t *)&_ebss;
-	while (sbss < ebss)
-		*sbss++ = 0;
 
 	md_init();
 	malloc_init();
