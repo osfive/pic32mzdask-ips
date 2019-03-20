@@ -39,6 +39,8 @@ SECTIONS
 		*(.devsign)
 	} > devsign
 
+	/* Ensure _smem is associated with the next section */
+	. = .;
 	_smem = ABSOLUTE(.);
 	.data : {
 		_sdata = ABSOLUTE(.);

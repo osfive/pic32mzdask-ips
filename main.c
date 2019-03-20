@@ -349,7 +349,10 @@ app_init(void)
 	uint32_t status;
 	uint32_t reg;
 
+	zero_bss();
+	relocate_data();
 	md_init();
+
 	malloc_init();
 	malloc_add_region(0xa0040380, (256*1024 - 0x380));
 
