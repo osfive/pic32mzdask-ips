@@ -3,7 +3,7 @@ ENTRY(_start)
 
 MEMORY
 {
-	flash        (rx) : ORIGIN = 0x9fc00000,  LENGTH = 64K-64
+	boot         (rx) : ORIGIN = 0x9fc00000,  LENGTH = 64K-64
 	devcfg        (r) : ORIGIN = 0x9fc0ffc0,  LENGTH = 16
 	devsign       (r) : ORIGIN = 0x9fc0ffe0,  LENGTH = 16
 	prog         (rx) : ORIGIN = 0x9d000000,  LENGTH = 2048K
@@ -18,16 +18,9 @@ SECTIONS
 	. = 0x9fc00000;
 	.start . : {
 		*start.o(.text)
-	} > flash
+	} > boot
 
-	.text : {
-		*(.text)
-	} > flash
-
-	.rodata : {
-		*(.rodata)
-	} > flash
-
+	. = 0x9fc0ffc0;
 	.devcfg : {
 		*(.config3)
 		*(.config2)
@@ -35,9 +28,19 @@ SECTIONS
 		*(.config0)
 	} > devcfg
 
+	. = 0x9fc0ffe0;
 	.devsign : {
 		*(.devsign)
 	} > devsign
+
+	. = 0x9d000000;
+	.text : {
+		*(.text)
+	} > prog
+
+	.rodata : {
+		*(.rodata)
+	} > prog
 
 	/* Ensure _smem is associated with the next section */
 	. = .;
@@ -46,7 +49,7 @@ SECTIONS
 		_sdata = ABSOLUTE(.);
 		*(.data*)
 		_edata = ABSOLUTE(.);
-	} > sram1 AT > flash
+	} > sram1 AT > prog
 
 	.bss : {
 		_sbss = ABSOLUTE(.);
