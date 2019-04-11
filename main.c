@@ -399,7 +399,7 @@ app_init(void)
 	printf("status register: %x\n", mips_rd_status());
 	printf("compare register: %x\n", mips_rd_compare());
 
-	thread_create("ips", 50000000, ips_main, NULL);
+	thread_create("ips", 50000000, 4096, ips_main, NULL);
 
 	__asm __volatile("syscall");
 
