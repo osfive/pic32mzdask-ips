@@ -18,15 +18,15 @@ Connect LCD pins to J15 base board header pins as follows:
 UART baud rate: 115200
 
 ### Build under Linux
-
+    $ sudo apt install gcc-mips-linux-gnu
     $ export CROSS_COMPILE=mips-linux-gnu-
     $ git clone --recursive https://github.com/osfive/pic32mzdask-ips
     $ cd pic32mzdask-ips
     $ bmake
 
 ### Build under FreeBSD
-
-    $ setenv CROSS_COMPILE mips-unknown-freebsd11.1-
+    $ sudo pkg install mips-gcc mips-binutils
+    $ setenv CROSS_COMPILE mips-unknown-freebsd12.0-
     $ git clone --recursive https://github.com/osfive/pic32mzdask-ips
     $ cd pic32mzdask-ips
     $ make
