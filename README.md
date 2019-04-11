@@ -18,7 +18,7 @@ Connect LCD pins to J15 base board header pins as follows:
 UART baud rate: 115200
 
 ### Build under Linux
-    $ sudo apt install gcc-mips-linux-gnu
+    $ sudo apt install gcc-mips-linux-gnu bmake
     $ export CROSS_COMPILE=mips-linux-gnu-
     $ git clone --recursive https://github.com/osfive/pic32mzdask-ips
     $ cd pic32mzdask-ips
