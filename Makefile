@@ -34,7 +34,7 @@ CFLAGS =	-march=mips32r2 -EL -msoft-float -nostdlib	\
 		-Wpointer-arith -Winline -Wcast-qual -Wundef	\
 		-Wno-pointer-sign -Wno-format			\
 		-Wmissing-include-dirs -Wno-unknown-pragmas	\
-		-Werror
+		-Werror -DCONFIG_SCHED -D__mips_o32
 
 all: ${FONT} __compile __link __srec
 
