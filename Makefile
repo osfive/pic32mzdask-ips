@@ -21,7 +21,8 @@ OBJECTS =	main.o						\
 		osfive/sys/mips/microchip/pic32_uart.o		\
 		start.o
 
-LIBRARIES =	KERN MIPS LIBC LIBC_QUAD LIBFONT
+KERNEL =	mips malloc sched
+LIBRARIES =	libc libc_quad libfont
 
 CFLAGS =	-march=mips32r2 -EL -msoft-float -nostdlib	\
 		-mno-abicalls -O -fno-pic -fno-builtin-printf	\
@@ -48,7 +49,6 @@ ${FONT}: ${FONT_SRC}
 clean:
 	rm -f ${OBJECTS:M*} ${FONT} ${LDSCRIPT} ${APP}.elf ${APP}.srec
 
-.include "osfive/lib/kern/Makefile.inc"
 .include "osfive/lib/libc/Makefile.inc"
 .include "osfive/lib/libfont/Makefile.inc"
 .include "osfive/mk/bsd.mk"
