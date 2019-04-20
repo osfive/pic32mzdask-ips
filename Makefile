@@ -1,15 +1,16 @@
 APP =		pic32mzdask-ips
-ARCH =		mips
+MACHINE =	mips
 
 CC =		${CROSS_COMPILE}gcc
 LD =		${CROSS_COMPILE}ld
 OBJCOPY =	${CROSS_COMPILE}objcopy
 
-LDSCRIPT =	${.OBJDIR}/ldscript
-LDSCRIPT_TPL =	${.CURDIR}/ldscript.tpl
+OBJDIR =	${CURDIR}/obj
+LDSCRIPT =	${OBJDIR}/ldscript
+LDSCRIPT_TPL =	${CURDIR}/ldscript.tpl
 
-FONT =		${.OBJDIR}/ter-124n.ld
-FONT_SRC =	${.CURDIR}/fonts/ter-124n.pcf.gz
+FONT =		${OBJDIR}/ter-124n.ld
+FONT_SRC =	${CURDIR}/fonts/ter-124n.pcf.gz
 
 OBJECTS =	main.o						\
 		osfive/sys/mips/microchip/pic32_intc.o		\
@@ -21,7 +22,7 @@ OBJECTS =	main.o						\
 		osfive/sys/mips/microchip/pic32_uart.o		\
 		start.o
 
-KERNEL =	mips malloc sched
+KERNEL =	malloc sched
 LIBRARIES =	libc libc_quad libfont
 
 CFLAGS =	-march=mips32r2 -EL -msoft-float -nostdlib	\
@@ -37,7 +38,7 @@ CFLAGS =	-march=mips32r2 -EL -msoft-float -nostdlib	\
 		-Wmissing-include-dirs -Wno-unknown-pragmas	\
 		-Werror -DCONFIG_SCHED -D__mips_o32
 
-all: ${FONT} __compile __link __srec
+all: ${FONT} _compile _link _srec
 
 ${LDSCRIPT}: ${LDSCRIPT_TPL}
 	sed s#FONT_PATH#${FONT}#g ${LDSCRIPT_TPL} > ${LDSCRIPT}
@@ -47,8 +48,6 @@ ${FONT}: ${FONT_SRC}
 	    hexdump -v -e '"BYTE(0x" 1/1 "%02X" ")\n"' > ${FONT}
 
 clean:
-	rm -f ${OBJECTS:M*} ${FONT} ${LDSCRIPT} ${APP}.elf ${APP}.srec
+	rm -f ${OBJECTS} ${FONT} ${LDSCRIPT} ${APP}.elf ${APP}.srec
 
-.include "osfive/lib/libc/Makefile.inc"
-.include "osfive/lib/libfont/Makefile.inc"
-.include "osfive/mk/bsd.mk"
+include osfive/mk/default.mk
