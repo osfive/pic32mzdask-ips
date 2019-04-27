@@ -38,16 +38,18 @@ CFLAGS =	-march=mips32r2 -EL -msoft-float -nostdlib	\
 		-Wmissing-include-dirs -Wno-unknown-pragmas	\
 		-Werror -DCONFIG_SCHED -D__mips_o32
 
-all: ${FONT} _compile _link _srec
+all:	${FONT} ${OBJDIR}/${APP}.elf ${OBJDIR}/${APP}.srec
 
 ${LDSCRIPT}: ${LDSCRIPT_TPL}
-	sed s#FONT_PATH#${FONT}#g ${LDSCRIPT_TPL} > ${LDSCRIPT}
+	@sed s#FONT_PATH#${FONT}#g ${LDSCRIPT_TPL} > ${LDSCRIPT}
 
 ${FONT}: ${FONT_SRC}
-	gunzip -c ${FONT_SRC} | \
+	@gunzip -c ${FONT_SRC} | \
 	    hexdump -v -e '"BYTE(0x" 1/1 "%02X" ")\n"' > ${FONT}
 
 clean:
-	rm -f ${OBJECTS} ${FONT} ${LDSCRIPT} ${APP}.elf ${APP}.srec
+	@rm -f ${OBJECTS} ${FONT} ${LDSCRIPT} ${OBJDIR}/${APP}.*
 
+include osfive/lib/libc/Makefile.inc
+include osfive/lib/libfont/Makefile.inc
 include osfive/mk/default.mk
