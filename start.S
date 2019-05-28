@@ -29,7 +29,8 @@
 
 ASM_ENTRY(_start)
 	la      sp, stack_top
-	la	t0, app_init
+	li	a0, 0
+	la	t0, md_init
 	jalr	t0
 	nop
 

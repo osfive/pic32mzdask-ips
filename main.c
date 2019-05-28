@@ -45,8 +45,6 @@
 
 #define	CPU_FREQ	200000000
 
-void app_init(void);
-
 static struct global_data {
 	uint8_t buffer[240*240*2];
 	uint8_t *ptr;
@@ -343,15 +341,11 @@ app_ports_init(struct pic32_port_softc *sc)
 	pic32_pps_write(&pps_sc, PPS_RPG8R, OS0_SDO2);
 }
 
-void
+int
 app_init(void)
 {
 	uint32_t status;
 	uint32_t reg;
-
-	zero_bss();
-	relocate_data();
-	md_init();
 
 	malloc_init();
 	malloc_add_region(0xa0040380, (256*1024 - 0x380));
@@ -399,9 +393,16 @@ app_init(void)
 	printf("status register: %x\n", mips_rd_status());
 	printf("compare register: %x\n", mips_rd_compare());
 
-	thread_create("ips", 1, 50000000, 4096, ips_main, NULL);
+	return (0);
+}
 
-	__asm __volatile("syscall");
+int
+main(void)
+{
+
+	printf("%s\n", __func__);
+
+	thread_create("ips", 1, 50000000, 4096, ips_main, NULL);
 
 	while (1)
 		cpu_idle();
