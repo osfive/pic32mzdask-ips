@@ -28,22 +28,38 @@
 #include <machine/asm.h>
 
 ASM_ENTRY(_start)
+
+	/* Zero BSS */
+	li	t2, 0
+	la	t0, _sbss
+	nop
+	la	t1, _ebss
+	nop
+1:
+	beq	t0, t1, 2f
+	nop
+	sb	t2, 0(t0)
+	addi	t0, t0, 1
+	j	1b
+	nop
+2:
+
+	/* Relocate data */
+	la	t0, _smem
+	la	t1, _sdata
+	la	t2, _edata
+
+3:
+	lb	t3, 0(t0)
+	sb	t3, 0(t1)
+	addi	t0, t0, 1
+	addi	t1, t1, 1
+
+	bne	t1, t2, 3b
+
+	/* Startup */
 	la      sp, stack_top
 	li	a0, 0
 	la	t0, md_init
 	jalr	t0
 	nop
-
-	/* Jump to U-Boot */
-	la	t0, 0x9d000000
-	jr	t0
-	nop
-
-#if 0
-VECTOR(MipsException)
-	nop
-	la	t0, app_exception
-	jalr	t0
-	nop
-VECTOR_END(MipsExceptionEnd)
-#endif
